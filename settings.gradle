@@ -1,0 +1,4 @@
+rootProject.name='AAP'
+include ':app'
+include ':tsp'
+include ':datarepository'

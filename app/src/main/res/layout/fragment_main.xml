@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/hello_main_fragment" />
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/back"
+            android:layout_height="100px"
+            android:layout_width="100px"
+            tools:ignore="MissingConstraints"
+            android:text="back"/>
+        <Button
+            android:id="@+id/enter_first_fragment"
+            android:layout_height="100px"
+            android:layout_width="100px"
+            tools:ignore="MissingConstraints"
+            android:text="enter first fragment"/>
+
+        <Button
+            android:id="@+id/enter_second_fragment"
+            android:layout_height="100px"
+            android:layout_width="100px"
+            android:text="enter second fragment"/>
+        <Button
+            android:id="@+id/test_tsp"
+            android:layout_height="100px"
+            android:layout_width="100px"
+            android:text="request tsp"/>
+        <Button
+            android:id="@+id/test_tsp_list"
+            android:layout_height="100px"
+            android:layout_width="100px"
+            android:text="request tsp list"/>
+
+    </LinearLayout>
+
+
+</FrameLayout>
