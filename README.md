@@ -1,5 +1,5 @@
 # mvvm-java
-采用mvvm框架、retrofit+okhttp+rxjava网络请求、navigation页面迁移并且实现隐藏和消去。
+采用mvvm框架、retrofit+okhttp+rxjava网络请求、navigation页面迁移，并做保留前一个页面的状态。
 ## navigation返回保留上一个页面的状态的实现方案
 其方法有两种，一是保留前一个页面创建的view 二是重写fragmentNavigator 重新创建一个navigator。现在介绍第二种
 * 首先创建一个类FixFragmentNavigator使其继承FragmentNavigator，重写父类的navigate方法，将父类的拷贝过来，修改其中instantiateFragment方法和ft.replace()方法.
@@ -65,6 +65,42 @@ protected void onCreate(Bundle savedInstanceState) {
         android:id="@+id/action_mainFragment_to_secondFragment"
         app:destination="@id/secondFragment" />
 </fixFragment>
+```
+
+上述方式会导致系统按下返回键时不调用popStackBack(),使其销毁的画页无法退栈，导致在进行迁移时，取到的栈顶是没有销毁的画页，其将要迁移的action在当前栈顶不存在，如果使用当前页的action进行迁移则会在naviController中无法找到此destinationId。所以建议，使其创建是基于宿主NavHostFragment的方式，使用继承NavHostFragment中的onCreateNavController(...)的方式对添加navigator，并且在activiy.xml配置宿主是继承NavHostFragment的子类。
+
+## 安全方式的保留上一个页面状态，创建fxfragment不变，重写NavHostFragment
+```
+import androidx.navigation.fragment.NavHostFragment;
+
+import com.test.aap.R;
+
+public class FixNavHostFragment extends NavHostFragment {
+    @Override
+    protected void onCreateNavController( @NonNull NavController navController ) {
+        super.onCreateNavController(navController);
+        navController.getNavigatorProvider().addNavigator( new FixFragmentNavigator(getContext(), getChildFragmentManager(),getContainerId()));
+    }
+
+    private int getContainerId() {
+        int id = getId();
+        if (id != 0 && id != View.NO_ID) {
+            return id;
+        }
+        // Fallback to using our own ID if this Fragment wasn't added via
+        // add(containerViewId, Fragment)
+        return R.id.nav_host_fragment_container;
+    }
+}
+
+activity.xml中
+<fragment
+    android:id="@+id/fragment"
+    android:name="com.test.aap.base.FixNavHostFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:defaultNavHost="true"
+    app:navGraph="@navigation/nav"/>
 ```
 
 
